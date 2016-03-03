@@ -17,6 +17,7 @@
 
 ##代码片段
 `if()`
+```
   while(homework == ture){
     if(iwilldo == false){
        if(deadline < 1 hours)
@@ -28,7 +29,7 @@
       sout"i will do it after a while";
     }
   }
-
+```
 ##对于课程的建议
 
 
