@@ -8,7 +8,7 @@ var BOUNDS_RIGHT = 400;
 var BOUNCE = 0.95;
 var friction_floor = 0.8;
 var sleepX = false;
-var sleepY = true;
+var sleepY = false;
 //画框设置
 var Frame = 10;
 var frameColor = '#BBB222';
@@ -65,18 +65,24 @@ var Body = (function () {
         //反弹
         if (!sleepY) {
             if (this.y + this.height > BOUNDS_BOTTOM) {
-                this.y = 300;
+                this.y = BOUNDS_BOTTOM - this.width;
                 this.vy = -(BOUNCE * this.vy);
             }
         }
         //TODO： 左右越界反弹
         if (!sleepX) {
             if (this.x + this.width > BOUNDS_RIGHT) {
+                this.x = BOUNDS_RIGHT - this.width;
                 this.vx = -friction_floor * this.vx;
             }
             if (this.x < BOUNDS_LEFT) {
+                this.x = 0;
                 this.vx = -friction_floor * this.vx;
             }
+        }
+        //静摩擦
+        if (sleepY) {
+            this.vx = friction_floor * this.vx;
         }
         if (Math.abs(this.vx) < 0.00001) {
             sleepX = true;
@@ -102,7 +108,7 @@ rect.color = '#FF0000';
 var body = new Body(rect);
 body.width = rect.width;
 body.height = rect.height;
-body.vx = 50; //需要保证 vx 在 0-50的范围内行为正常
+body.vx = 5000; //需要保证 vx 在 0-50的范围内行为正常
 body.vy = 0; //需要保证 vy 在 0-50的范围内行为正常
 /**
  * 创建画框
