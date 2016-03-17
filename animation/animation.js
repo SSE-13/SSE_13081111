@@ -6,6 +6,12 @@ var BOUNDS_BOTTOM = 400;
 var BOUNDS_LEFT = 0;
 var BOUNDS_RIGHT = 400;
 var BOUNCE = 0.95;
+var f = 0.5;
+var sleepX = false;
+var sleepY = false;
+//画框设置
+var Frame = 10;
+var frameColor = '#BBB222';
 /**
  * 计时器系统
  */
@@ -45,13 +51,35 @@ var Body = (function () {
     }
     Body.prototype.onTicker = function (duringTime) {
         this.vy += duringTime * GRAVITY;
+        //速度过小则停止
+        if (sleepX) {
+            this.vx = 0;
+        }
         this.x += duringTime * this.vx;
+        if (sleepY) {
+            this.vy = 0;
+        }
         this.y += duringTime * this.vy;
         //反弹
         if (this.y + this.height > BOUNDS_BOTTOM) {
             this.vy = -BOUNCE * this.vy;
+            if (Math.abs(this.vy) < 0.1) {
+                sleepY = true;
+            }
         }
         //TODO： 左右越界反弹
+        if (this.x + this.width > BOUNDS_RIGHT) {
+            if (Math.abs(this.vx) < 0.1) {
+                sleepX = true;
+            }
+            this.vx = -BOUNCE * this.vx;
+        }
+        if (this.x < BOUNDS_LEFT) {
+            if (Math.abs(this.vx) < 0.1) {
+                sleepX = true;
+            }
+            this.vx = -BOUNCE * this.vx;
+        }
         //根据物体位置更新显示对象属性
         var displayObject = this.displayObject;
         displayObject.x = this.x;
@@ -60,7 +88,7 @@ var Body = (function () {
     return Body;
 }());
 var rect = new Rect();
-rect.width = 150;
+rect.width = 100;
 rect.height = 100;
 rect.color = '#FF0000';
 /**
@@ -69,9 +97,30 @@ rect.color = '#FF0000';
 var body = new Body(rect);
 body.width = rect.width;
 body.height = rect.height;
-body.vx = 5; //需要保证 vx 在 0-50的范围内行为正常
+body.vx = 50; //需要保证 vx 在 0-50的范围内行为正常
 body.vy = 0; //需要保证 vy 在 0-50的范围内行为正常
+/**
+ * 创建画框
+ */
+var frame_B = new Rect();
+frame_B.width = BOUNDS_RIGHT;
+frame_B.height = Frame;
+frame_B.x = 0;
+frame_B.y = BOUNDS_BOTTOM;
+frame_B.color = frameColor;
+var frame_R = new Rect();
+frame_R.width = Frame;
+frame_R.height = BOUNDS_BOTTOM + 10;
+frame_R.x = BOUNDS_RIGHT;
+frame_R.y = 0;
+frame_R.color = frameColor;
+var frame_L = new Rect();
+frame_L.width = 10;
+frame_L.height = 410;
+frame_L.x = -10;
+frame_L.y = 0;
+frame_L.color = frameColor;
 var renderCore = new RenderCore();
 var ticker = new Ticker();
-renderCore.start([rect]);
+renderCore.start([rect, frame_B, frame_L, frame_R]);
 ticker.start([body]);
