@@ -7,8 +7,8 @@ var BOUNDS_LEFT = 0;
 var BOUNDS_RIGHT = 400;
 var BOUNCE = 0.95;
 var friction_floor = 0.8;
-var sleepX = true;
-var sleepY = false;
+var sleepX = false;
+var sleepY = true;
 //画框设置
 var Frame = 10;
 var frameColor = '#BBB222';
@@ -65,10 +65,8 @@ var Body = (function () {
         //反弹
         if (!sleepY) {
             if (this.y + this.height > BOUNDS_BOTTOM) {
+                this.y = 300;
                 this.vy = -(BOUNCE * this.vy);
-                if (Math.abs(this.vy) < 0.0001 && this.y <= 400) {
-                    sleepY = true;
-                }
             }
         }
         //TODO： 左右越界反弹
@@ -81,11 +79,12 @@ var Body = (function () {
             }
         }
         if (Math.abs(this.vx) < 0.00001) {
+            sleepX = true;
         }
-        if (Math.abs(this.vy) < 0.1 && this.y >= BOUNDS_BOTTOM - this.width) {
+        if (Math.abs(this.vy) < 1 && this.y >= BOUNDS_BOTTOM - this.width) {
             sleepY = true;
         }
-        console.log(this.vx, " | " + this.vy, sleepX, sleepY);
+        console.log(this.vx, " | ", this.vy, sleepX, sleepY);
         //根据物体位置更新显示对象属性
         var displayObject = this.displayObject;
         displayObject.x = this.x;

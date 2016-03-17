@@ -13,8 +13,8 @@ const BOUNCE = 0.95;
 
 const friction_floor = 0.8;
 
-var sleepX = true;
-var sleepY = false;
+var sleepX = false;
+var sleepY = true;
 
 //画框设置
 const Frame = 10;
@@ -86,10 +86,8 @@ class Body {
         //反弹
         if(!sleepY){
             if (this.y + this.height > BOUNDS_BOTTOM) {
+                this.y = 300; 
                 this.vy = -(BOUNCE * this.vy);
-                if(Math.abs(this.vy) < 0.0001 && this.y <= 400){ 
-                    sleepY = true;
-                }
              }
         }
         //TODO： 左右越界反弹
@@ -104,14 +102,14 @@ class Body {
         }
         
        if(Math.abs(this.vx) < 0.00001){
-           //     sleepX = true;
+                sleepX = true;
        }
        
-        if(Math.abs(this.vy) < 0.1 && this.y >= BOUNDS_BOTTOM - this.width){ 
+        if(Math.abs(this.vy) < 1 && this.y >= BOUNDS_BOTTOM - this.width){ 
                     sleepY = true;
         }
       
-     console.log(this.vx," | "+this.vy,sleepX,sleepY);
+     console.log(this.vx," | ",this.vy,sleepX,sleepY);
 
 
         //根据物体位置更新显示对象属性
