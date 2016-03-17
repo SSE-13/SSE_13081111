@@ -133,7 +133,7 @@ RB5.source = X + 'RB5.jpg';
 RB5.x = 1101;
 RB5.y = 636;
 var RB6 = new Bitmap();
-RB6.source = 'Resource/RB6.jpg';
+RB6.source = X + 'RB6.jpg';
 RB6.x = 1101;
 RB6.y = 682;
 //渲染队列
