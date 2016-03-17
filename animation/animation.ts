@@ -11,9 +11,9 @@ const BOUNDS_RIGHT = 400;
 
 const BOUNCE = 0.95;
 
-const f = 0.5;
+const friction_floor = 0.8;
 
-var sleepX = false;
+var sleepX = true;
 var sleepY = false;
 
 //画框设置
@@ -67,46 +67,51 @@ class Body {
     }
 
     public onTicker(duringTime) {
-
-        this.vy += duringTime * GRAVITY;
-        
         //速度过小则停止
         if(sleepX){
             this.vx = 0;
         }
         this.x += duringTime * this.vx;
         
+        
         if(sleepY){
             this.vy = 0;
+            
+        }else{
+              this.vy += duringTime * GRAVITY;
         }
         this.y += duringTime * this.vy;
 
 
         //反弹
-        if (this.y + this.height > BOUNDS_BOTTOM) {
-            this.vy = -BOUNCE * this.vy;
-            if(Math.abs(this.vy) < 0.1){ 
-                sleepY = true;
-            }
+        if(!sleepY){
+            if (this.y + this.height > BOUNDS_BOTTOM) {
+                this.vy = -(BOUNCE * this.vy);
+                if(Math.abs(this.vy) < 0.0001 && this.y <= 400){ 
+                    sleepY = true;
+                }
+             }
         }
-
         //TODO： 左右越界反弹
-        if(this.x + this.width > BOUNDS_RIGHT){
-            if(Math.abs(this.vx) < 0.1){
-                sleepX = true;
-            }
-            this.vx = -BOUNCE * this.vx;
+        if(!sleepX){
+             if(this.x + this.width > BOUNDS_RIGHT){
+                 this.vx = -friction_floor * this.vx;
+             }
+        
+             if(this.x < BOUNDS_LEFT){
+                   this.vx = -friction_floor * this.vx;
+             }
         }
         
-        if(this.x < BOUNDS_LEFT){
-            if(Math.abs(this.vx) < 0.1){
-                sleepX = true;
-            }
-            this.vx = -BOUNCE * this.vx;
-        }
-        
+       if(Math.abs(this.vx) < 0.00001){
+           //     sleepX = true;
+       }
        
+        if(Math.abs(this.vy) < 0.1 && this.y >= BOUNDS_BOTTOM - this.width){ 
+                    sleepY = true;
+        }
       
+     console.log(this.vx," | "+this.vy,sleepX,sleepY);
 
 
         //根据物体位置更新显示对象属性

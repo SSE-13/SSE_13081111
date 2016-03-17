@@ -6,8 +6,8 @@ var BOUNDS_BOTTOM = 400;
 var BOUNDS_LEFT = 0;
 var BOUNDS_RIGHT = 400;
 var BOUNCE = 0.95;
-var f = 0.5;
-var sleepX = false;
+var friction_floor = 0.8;
+var sleepX = true;
 var sleepY = false;
 //画框设置
 var Frame = 10;
@@ -50,7 +50,6 @@ var Body = (function () {
         this.displayObject = displayObject;
     }
     Body.prototype.onTicker = function (duringTime) {
-        this.vy += duringTime * GRAVITY;
         //速度过小则停止
         if (sleepX) {
             this.vx = 0;
@@ -59,27 +58,34 @@ var Body = (function () {
         if (sleepY) {
             this.vy = 0;
         }
+        else {
+            this.vy += duringTime * GRAVITY;
+        }
         this.y += duringTime * this.vy;
         //反弹
-        if (this.y + this.height > BOUNDS_BOTTOM) {
-            this.vy = -BOUNCE * this.vy;
-            if (Math.abs(this.vy) < 0.1) {
-                sleepY = true;
+        if (!sleepY) {
+            if (this.y + this.height > BOUNDS_BOTTOM) {
+                this.vy = -(BOUNCE * this.vy);
+                if (Math.abs(this.vy) < 0.0001 && this.y <= 400) {
+                    sleepY = true;
+                }
             }
         }
         //TODO： 左右越界反弹
-        if (this.x + this.width > BOUNDS_RIGHT) {
-            if (Math.abs(this.vx) < 0.1) {
-                sleepX = true;
+        if (!sleepX) {
+            if (this.x + this.width > BOUNDS_RIGHT) {
+                this.vx = -friction_floor * this.vx;
             }
-            this.vx = -BOUNCE * this.vx;
-        }
-        if (this.x < BOUNDS_LEFT) {
-            if (Math.abs(this.vx) < 0.1) {
-                sleepX = true;
+            if (this.x < BOUNDS_LEFT) {
+                this.vx = -friction_floor * this.vx;
             }
-            this.vx = -BOUNCE * this.vx;
         }
+        if (Math.abs(this.vx) < 0.00001) {
+        }
+        if (Math.abs(this.vy) < 0.1 && this.y >= BOUNDS_BOTTOM - this.width) {
+            sleepY = true;
+        }
+        console.log(this.vx, " | " + this.vy, sleepX, sleepY);
         //根据物体位置更新显示对象属性
         var displayObject = this.displayObject;
         displayObject.x = this.x;
