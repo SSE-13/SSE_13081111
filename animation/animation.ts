@@ -139,7 +139,7 @@ rect.color = '#FF0000';
 var body = new Body(rect);
 body.width = rect.width;
 body.height = rect.height;
-body.vx = 5000;//需要保证 vx 在 0-50的范围内行为正常
+body.vx = 500;//需要保证 vx 在 0-50的范围内行为正常
 body.vy = 0;//需要保证 vy 在 0-50的范围内行为正常
 
 /**

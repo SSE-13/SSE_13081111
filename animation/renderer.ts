@@ -101,6 +101,9 @@ function loadResource(imageList, callback) {
 
 
 
+
+
+
 /**
  * 渲染核心
  */
