@@ -9,6 +9,10 @@ var game;
     var GRID_PIXEL_HEIGHT = 50;
     var NUM_ROWS = 12;
     var NUM_COLS = 12;
+    //速度
+    var v = 10;
+    //单位
+    var x = GRID_PIXEL_HEIGHT;
     var WorldMap = (function (_super) {
         __extends(WorldMap, _super);
         function WorldMap() {
@@ -23,14 +27,20 @@ var game;
             grid.setWalkable(5, 5, false);
         }
         WorldMap.prototype.render = function (context) {
-            context.fillStyle = '#0000FF';
             context.strokeStyle = '#FF0000';
             context.beginPath();
             for (var i = 0; i < NUM_COLS; i++) {
                 for (var j = 0; j < NUM_ROWS; j++) {
-                    context.rect(i * GRID_PIXEL_WIDTH, j * GRID_PIXEL_HEIGHT, GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT);
-                    context.fill();
-                    context.stroke();
+                    if (this.grid.getNode(i, j).walkable == false) {
+                        context.fillStyle = '#000000';
+                        context.fillRect(i * GRID_PIXEL_WIDTH, j * GRID_PIXEL_HEIGHT, GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT);
+                        context.stroke();
+                    }
+                    if (this.grid.getNode(i, j).walkable) {
+                        context.fillStyle = '#0000FF';
+                        context.fillRect(i * GRID_PIXEL_WIDTH, j * GRID_PIXEL_HEIGHT, GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT);
+                        context.stroke();
+                    }
                 }
             }
             context.closePath();
@@ -57,7 +67,9 @@ var game;
         __extends(BoyBody, _super);
         function BoyBody() {
             _super.apply(this, arguments);
+            this.i = 0;
         }
+        ;
         BoyBody.prototype.run = function (grid) {
             grid.setStartNode(0, 0);
             grid.setEndNode(10, 8);
@@ -65,11 +77,35 @@ var game;
             findpath.setHeurisitic(findpath.diagonal);
             var result = findpath.findPath(grid);
             var path = findpath._path;
+            this.route = path;
+            this.length = path.length;
             console.log(path);
             console.log(grid.toString());
         };
         BoyBody.prototype.onTicker = function (duringTime) {
-            //  console.log(path[0].x,path[0].y);
+            if (this.i <= this.length) {
+                this.target = this.route[this.i];
+                if (this.x < this.target.x * x) {
+                    if (this.x + v * duringTime < this.target.x * x) {
+                        this.x += duringTime * v;
+                    }
+                    else {
+                        this.x = this.target.x * x;
+                    }
+                }
+                if (this.y < this.target.y * x) {
+                    if (this.y + v * duringTime < this.target.y * x) {
+                        this.y += duringTime * v;
+                    }
+                    else {
+                        this.y = this.target.y * x;
+                    }
+                }
+                if (this.x == this.target.x * x && this.y == this.target.y * x) {
+                    this.i++;
+                }
+                console.log(this.x + " " + this.y + "   |  " + this.target.x + " " + this.target.y + "\\" + this.i);
+            }
         };
         return BoyBody;
     }(Body));
