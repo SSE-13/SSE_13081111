@@ -38,25 +38,33 @@ class Body {
     y = 0;
     width = 0;
     height = 0;
+    rotation = 0;
+    scaleX = 1;
+    scaleY = 1;
 
     displayObject;
 
-    constructor(displayObject: DisplayObject) {
+    constructor(displayObject: render.DisplayObject) {
         this.displayObject = displayObject;
+        this.x = displayObject.x;
+        this.y = displayObject.y;
+        this.rotation = displayObject.rotation;
+        this.scaleX = displayObject.scaleX;
+        this.scaleY = displayObject.scaleY;
     }
 
     public onTicker(duringTime) {
-     
-        
-        
 
     }
     
     public updateDisplayObject(){
           //根据物体位置更新显示对象属性
-        var displayObject = this.displayObject;
+        var displayObject:render.DisplayObject = this.displayObject;
         displayObject.x = this.x;
         displayObject.y = this.y;
+        displayObject.rotation = this.rotation;
+        displayObject.scaleX = this.scaleX;
+        displayObject.scaleY = this.scaleY;
     }
     
 }
