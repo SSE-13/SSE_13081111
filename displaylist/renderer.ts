@@ -62,6 +62,21 @@ module render {
 
         }
     }
+    
+    function MatrixAdd(m1:Matrix,m2:Matrix){
+        var reslut = new Matrix();
+        
+        reslut.a = m1.a * m2.a + m1.b*m2.c;
+        reslut.b = m1.a * m2.b + m1.b*m2.d;
+        reslut.c = m2.a * m1.c + m2.c*m1.d;
+        reslut.d = m2.b * m1.c + m1.d*m2.d;
+        reslut.tx = m2.a * m1.tx + m2.c*m1.ty + m2.tx;
+        reslut.ty = m2.b * m1.tx + m2.b*m1.ty + m2.ty;
+        
+        return reslut;
+        
+    }
+    
 
     export class DisplayObjectContainer extends DisplayObject {
 
