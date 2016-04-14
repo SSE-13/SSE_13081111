@@ -11,6 +11,20 @@ function readFile() {
     return mapData;
 }
 
+function changMap(rows,clows,changecolor){
+    var mapDate = readFile;
+    mapData[rows][clows] = changecolor;  
+    return mapData
+}
+
+function saveMap() {
+    var map_path = __dirname + "/map.json";
+    var obj = JSON.stringify(mapData);
+    var namedobj = "{" + "map"+":"+obj+"}";
+    fs.writeFileSync(map_path,namedobj,"utf-8");
+    
+    console.log("savemap");
+}
 
 function createMapEditor() {
     var world = new editor.WorldMap();
@@ -31,6 +45,9 @@ function createMapEditor() {
 
 
             eventCore.register(tile, events.displayObjectRectHitTest, onTileClick);
+            
+           
+            
         }
     }
     return world;
@@ -40,6 +57,24 @@ function createMapEditor() {
 
 
 function onTileClick(tile: editor.Tile) {
+    var changeXnum=0,changeYnum=0;     
+    //0 == red
+    var targetColor = 1;
+     
+    changeXnum = tile.x /50; 
+    changeYnum = tile.y /50;
+    
+    //change map
+    changMap(changeXnum,changeYnum,targetColor);
+    //save map
+   // saveMap();
+   
+   console.log(editor.isDirty);
+    editor.isDirty = false;
+    
+    
+    console.log(mapData[changeXnum][changeYnum]);
+    
     console.log(tile);
 }
 

@@ -25,6 +25,10 @@ module editor {
         render(context: CanvasRenderingContext2D) {
             super.render(context);
         }
+        
+       console.log("asd");
+        
+        
     }
 
 
