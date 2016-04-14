@@ -40,6 +40,9 @@ module render {
 
             var parent = this.parent;
             var localMatrix = this.getLocalMatrix();
+            
+            
+            
             if (!parent) {
                 this.globalMatrix = localMatrix;
             }
@@ -69,6 +72,7 @@ module render {
     // Container
     //   draw
     //{  context.setTransform()  }
+   
 
     export class DisplayObjectContainer extends DisplayObject {
 
