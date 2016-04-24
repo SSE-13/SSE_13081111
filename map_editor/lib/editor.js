@@ -13,8 +13,6 @@ var editor;
         render(context) {
             super.render(context);
         }
-        log() { }
-        ;
     }
     editor.WorldMap = WorldMap;
     class Tile extends render.Rect {

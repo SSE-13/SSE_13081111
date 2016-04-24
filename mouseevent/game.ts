@@ -1,4 +1,8 @@
 
+
+
+
+
 var humanContainer = new render.DisplayObjectContainer();
 
 var R = "Resource";
@@ -10,7 +14,6 @@ var rightArm = new render.Bitmap();
 var leftLeg = new render.Bitmap();
 var rightLeg = new render.Bitmap();
 var weapon = new render.Bitmap();
-
 
 head.source = R+"/Head.png";
 body.source = R+"/Body.png";
@@ -51,22 +54,17 @@ weapon.y = -37;
 var renderCore = new render.RenderCore();
 renderCore.start(humanContainer, [R+"/Weapon.png",R+"/Head.png",R+"/Body.png",R+"/LeftArm.png",R+"/RightArm.png",R+"/LeftLeg.png", R+"/RightLeg.png"]);
 
-var renderCore = new render.RenderCore();
-renderCore.start(humanContainer, ["wander-icon.jpg"]);
 
 class HumanBody extends Body {
-    
-    
-    vx:number = 5;
-    
 
     onTicker(duringTime: number) {
-      var a = 0;
+         var a = 0;
          var a2 = 20;
 
          this.x += this.vx*duringTime + a*duringTime;
          this.y += this.vy*duringTime; 
          this.rotation += Math.PI*duringTime + a2*duringTime;
+         
          
          a += 10;
          a2 += 20;
@@ -78,7 +76,7 @@ var ticker = new Ticker();
 var warrior = new HumanBody(humanContainer);
 warrior.vx = 10;
 warrior.y =200;
-ticker.start([body]);
+ticker.start([warrior]);
 
 
 var eventCore = new events.EventCore();
@@ -93,6 +91,8 @@ var headOnClick = () => {
     alert("clicked!!");
     //修改 HumanBody 的速度，使其反向移动
 }
+
+var Leg
 
 eventCore.register(head,headHitTest,headOnClick);
 

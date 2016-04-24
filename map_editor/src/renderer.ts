@@ -105,7 +105,7 @@ module render {
             else {
                 context.font = "20px Arial";
                 context.fillStyle = '#000000';
-                context.fillText('错误的URL', 0, 20);
+                context.fillText('错误的URLas', 0, 20);
             }
         }
 
@@ -164,7 +164,7 @@ module render {
             }
 
             function onLoadError() {
-                alert('资源加载失败:' + imageUrl);
+                alert('资源加载失败!!:' + imageUrl);
             }
         })
     }

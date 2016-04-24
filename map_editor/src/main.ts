@@ -13,16 +13,17 @@ function readFile() {
 
 function changMap(rows,clows,changecolor){
     var mapDate = readFile;
-    mapData[rows][clows] = changecolor;  
+    mapData[clows][rows] = changecolor;  
     return mapData
 }
 
 function saveMap() {
     var map_path = __dirname + "/map.json";
-    var obj = JSON.stringify(mapData);
-    var namedobj = "{" + "map"+":"+obj+"}";
-    fs.writeFileSync(map_path,namedobj,"utf-8");
-    
+    var content = fs.readFileSync(map_path,"utf-8");
+    var obj = JSON.parse(content);
+    obj.map = mapData;
+    var objS = JSON.stringify(obj);
+    fs.writeFileSync(map_path,objS,"utf-8");
     console.log("savemap");
 }
 
@@ -50,6 +51,15 @@ function createMapEditor() {
             
         }
     }
+    
+    var Btn_save = new render.Bitmap();
+    Btn_save.source = "Resource/Btn_Save.png";
+    Btn_save.x = 0;
+    Btn_save.y = 200;
+    renderCore.start(Btn_save,["Resource/Btn_Save.png"]);
+    
+    world.addChild(Btn_save);
+    
     return world;
 
 }
@@ -57,25 +67,33 @@ function createMapEditor() {
 
 
 function onTileClick(tile: editor.Tile) {
-    var changeXnum=0,changeYnum=0;     
-    //0 == red
-    var targetColor = 1;
-     
-    changeXnum = tile.x /50; 
-    changeYnum = tile.y /50;
+   //0 == red 1==blue
     
-    //change map
-    changMap(changeXnum,changeYnum,targetColor);
-    //save map
-   // saveMap();
+    var changeXnum = 0, changeYnum = 0;
+    changeXnum = tile.x / 50;
+    changeYnum = tile.y / 50;
+    
+    //检测之前的颜色
+    if(mapData[changeYnum][changeXnum]==1){
+            var targetColor = 0;
+    }else{
+            var targetColor = 1;
+    }
+
    
-   console.log(editor.isDirty);
+    //change map
+    changMap(changeXnum, changeYnum, targetColor);
+    //save map
+    saveMap();
+   
+    console.log(editor.isDirty);
     editor.isDirty = false;
+    console.log(editor.isDirty);
+   // console.log(mapData[changeXnum][changeYnum]);
+    //console.log(tile);
     
-    
-    console.log(mapData[changeXnum][changeYnum]);
-    
-    console.log(tile);
+    //{"map":[[0,1,0,0],[1,0,0,1],[1,0,0,0],[1,0,0,0]]}
+    //{"map":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]}
 }
 
 
@@ -89,3 +107,8 @@ eventCore.init();
 
 var editor = createMapEditor();
 renderCore.start(editor);
+
+var Btn_save = new render.Bitmap();
+Btn_save.source = "Resource/Btn_Save.png";
+Btn_save.x = 0;
+Btn_save.y = 0;

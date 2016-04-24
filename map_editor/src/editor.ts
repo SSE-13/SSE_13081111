@@ -17,8 +17,8 @@ module editor {
             super();
             this.cache = document.createElement("canvas");
             this.cache.width = 400;
-            this.cache.height = 400;
-
+            this.cache.height =400;
+            
         }
 
 
@@ -26,7 +26,7 @@ module editor {
             super.render(context);
         }
         
-       console.log("asd");
+
         
         
     }
