@@ -54,20 +54,27 @@ weapon.y = -37;
 var renderCore = new render.RenderCore();
 renderCore.start(humanContainer, [R+"/Weapon.png",R+"/Head.png",R+"/Body.png",R+"/LeftArm.png",R+"/RightArm.png",R+"/LeftLeg.png", R+"/RightLeg.png"]);
 
+//加速度
+var SpeedA = 0;
+var SpeedB = 2;
+var Forzero = 1; 
+
+var stop = false;
+var rotationDir = 1;// -1反向
 
 class HumanBody extends Body {
 
     onTicker(duringTime: number) {
-         var a = 0;
-         var a2 = 20;
 
-         this.x += this.vx*duringTime + a*duringTime;
+
+         this.x += (this.vx*duringTime + SpeedA*duringTime) * Forzero;
          this.y += this.vy*duringTime; 
-         this.rotation += Math.PI*duringTime + a2*duringTime;
+         this.rotation += (Math.PI*duringTime + SpeedB*duringTime)*rotationDir*Forzero;
          
+         if(stop){
+             this.rotation = 0;
+         }
          
-         a += 10;
-         a2 += 20;
 
     }
 }
@@ -83,19 +90,54 @@ var eventCore = new events.EventCore();
 eventCore.init();
 
 var headHitTest = (localPoint:math.Point,displayObject:render.DisplayObject) =>{
-    alert (`点击位置为${localPoint.x},${localPoint.y}`);
-    return true;
+    if(localPoint.x > displayObject.x && localPoint.x < displayObject.x + 88){
+         if(localPoint.y > displayObject.y && localPoint.y < displayObject.y + 54){
+             return true;
+         }
+    }
+    else {
+        return false;
+    }
 }
+
+var legHitTest = (localPoint:math.Point,displayObject:render.DisplayObject) =>{
+    if(localPoint.x > displayObject.x - 55 && localPoint.x < displayObject.x ){
+         if(localPoint.y > displayObject.y - 89 && localPoint.y < displayObject.y){
+             return true;
+         }
+    }
+    else {
+        return false;
+    }
+}
+
 
 var headOnClick = () => {
-    alert("clicked!!");
     //修改 HumanBody 的速度，使其反向移动
+    if(rotationDir == -1){
+        rotationDir = 1;
+    } 
+    else if (rotationDir == 1){
+        rotationDir = -1;
+    }
+    
+    if(stop){
+        stop = false;
+        Forzero = 1;
+    }
 }
 
-var Leg
+var legOnClick = () =>{
+    console.log("hit");
+    if(!stop){
+        Forzero = 0;
+        stop = true;
+    }
+}
 
 eventCore.register(head,headHitTest,headOnClick);
-
+eventCore.register(leftLeg,legHitTest,legOnClick);
+eventCore.register(rightLeg,legHitTest,legOnClick);
 
 
 
