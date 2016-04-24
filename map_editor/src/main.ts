@@ -51,13 +51,15 @@ function createMapEditor() {
             
         }
     }
-    
+    // 网格以外的图元创建
     var Btn_save = new render.Bitmap();
     Btn_save.source = "Resource/Btn_Save.png";
     Btn_save.x = 0;
-    Btn_save.y = 200;
+    Btn_save.y = 220;
     renderCore.start(Btn_save,["Resource/Btn_Save.png"]);
     
+    eventCore.register(Btn_save, events.displayObjectRectHitTest, onBtnSaveClick);
+     
     world.addChild(Btn_save);
     
     return world;
@@ -89,11 +91,16 @@ function onTileClick(tile: editor.Tile) {
     console.log(editor.isDirty);
     editor.isDirty = false;
     console.log(editor.isDirty);
-   // console.log(mapData[changeXnum][changeYnum]);
+    // console.log(mapData[changeXnum][changeYnum]);
     //console.log(tile);
     
     //{"map":[[0,1,0,0],[1,0,0,1],[1,0,0,0],[1,0,0,0]]}
     //{"map":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]}
+}
+
+function onBtnSaveClick() {
+    saveMap();
+    console.log("Hit");
 }
 
 
@@ -107,8 +114,3 @@ eventCore.init();
 
 var editor = createMapEditor();
 renderCore.start(editor);
-
-var Btn_save = new render.Bitmap();
-Btn_save.source = "Resource/Btn_Save.png";
-Btn_save.x = 0;
-Btn_save.y = 0;

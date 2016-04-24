@@ -42,8 +42,9 @@ function createMapEditor() {
     var Btn_save = new render.Bitmap();
     Btn_save.source = "Resource/Btn_Save.png";
     Btn_save.x = 0;
-    Btn_save.y = 200;
+    Btn_save.y = 220;
     renderCore.start(Btn_save, ["Resource/Btn_Save.png"]);
+    eventCore.register(Btn_save, events.displayObjectRectHitTest, onBtnSaveClick);
     world.addChild(Btn_save);
     return world;
 }
@@ -54,30 +55,36 @@ function onTileClick(tile) {
     changeYnum = tile.y / 50;
     //检测之前的颜色
     if (mapData[changeYnum][changeXnum] == 1) {
+        tile.color = "#FF0000";
         var targetColor = 0;
     }
     else {
+        tile.color = "#0000FF";
         var targetColor = 1;
     }
-    //change map
+
     changMap(changeXnum, changeYnum, targetColor);
-    //save map
-    saveMap();
+
     console.log(editor.isDirty);
     editor.isDirty = false;
     console.log(editor.isDirty);
+    
     // console.log(mapData[changeXnum][changeYnum]);
     //console.log(tile);
-    //{"map":[[0,1,0,0],[1,0,0,1],[1,0,0,0],[1,0,0,0]]}
-    //{"map":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]}
+    
+    
+
 }
+
+function onBtnSaveClick() {
+    saveMap();
+    console.log("Hit");
+}
+
+
 var mapData = readFile();
 var renderCore = new render.RenderCore();
 var eventCore = new events.EventCore();
 eventCore.init();
 var editor = createMapEditor();
 renderCore.start(editor);
-var Btn_save = new render.Bitmap();
-Btn_save.source = "Resource/Btn_Save.png";
-Btn_save.x = 0;
-Btn_save.y = 0;

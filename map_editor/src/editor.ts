@@ -26,8 +26,6 @@ module editor {
             super.render(context);
         }
         
-
-        
         
     }
 
