@@ -65,11 +65,13 @@ module ui {
 
 
 
+    }
 
+    export class DisplayBlock extends render.DisplayObjectContainer {
+          
 
 
     }
-
 
 
 }

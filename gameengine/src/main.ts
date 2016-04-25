@@ -49,15 +49,25 @@ function createMapEditor() {
     }
     
      // 网格以外的图元创建
+     //————Btn
     var Btn_save = new render.Bitmap();
     Btn_save.source = "Resource/Btn_Save.png";
     Btn_save.x = 0;
-    Btn_save.y = 220;
+    Btn_save.y = 50*cols + 20;
     renderCore.start(Btn_save,["Resource/Btn_Save.png"]);
-    
     eventCore.register(Btn_save, events.displayObjectRectHitTest, onBtnSaveClick);
      
-    world.addChild(Btn_save);
+     //————Background
+     /*
+     var background = new render.Rect();
+     background.x = 50 * rows + 20;
+     background.width = 300;
+     background.height = 500;
+     background.color = "#797979";
+     
+    
+     world.addChild(Btn_save);
+     world.addChild(background);*/
     
     return world;
 
@@ -107,8 +117,16 @@ eventCore.init();
 var mapEditor = createMapEditor();
 var stage = new render.DisplayObjectContainer();
 stage.addChild(mapEditor);
-var panel = new editor.ControlPanel();
-panel.x = 300;
-stage.addChild(panel);
 
+var panel = new editor.Block("Edtior",200,365);
+panel.x = 450;
+panel.y = 0;
+
+var materialBox = new editor.Block("Material Box",650,200);
+materialBox.x = 0;
+materialBox.y = 350;
+
+stage.addChild(panel);
+stage.addChild(materialBox);
 renderCore.start(stage);
+

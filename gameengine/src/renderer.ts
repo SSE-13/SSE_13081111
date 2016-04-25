@@ -161,10 +161,15 @@ module render {
          * 字体大小
          */
         public fontSize: number = 20;
+        
+        /**
+         * 字体颜色
+         */
+        public fontColor:string = "#000000";
 
         render(context: CanvasRenderingContext2D) {
             context.font = `${this.fontSize}px Arial`;
-            context.fillStyle = '#000000';
+            context.fillStyle = this.fontColor;
             context.textAlign = this.textAlign;
             //实现居中功能
             var offsetx = this.textAlign == "center" ? this.width / 2 : 0;

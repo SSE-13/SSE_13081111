@@ -64,4 +64,12 @@ var ui;
         return Button;
     }(render.DisplayObjectContainer));
     ui.Button = Button;
+    var DisplayBlock = (function (_super) {
+        __extends(DisplayBlock, _super);
+        function DisplayBlock() {
+            _super.apply(this, arguments);
+        }
+        return DisplayBlock;
+    }(render.DisplayObjectContainer));
+    ui.DisplayBlock = DisplayBlock;
 })(ui || (ui = {}));
