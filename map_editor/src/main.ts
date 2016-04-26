@@ -69,7 +69,7 @@ function createMapEditor() {
 
 
 function onTileClick(tile: editor.Tile) {
-   //0 == red 1==blue
+    //0 == red 1==blue
     
     var changeXnum = 0, changeYnum = 0;
     changeXnum = tile.x / 50;

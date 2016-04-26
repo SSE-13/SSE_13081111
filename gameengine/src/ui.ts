@@ -45,11 +45,13 @@ module ui {
             this.background = new render.Rect();
             this.background.width = this.width;
             this.background.height = this.height;
+            this.background.color = "#383838"
             this.label = new render.TextField();
             this.label.width = this.width;
             this.label.height = this.height;
             this.label.textAlign = "center";
             this.label.text = this.text;
+            this.label.fontColor = "#EEEEEE";
             this.addChild(this.background);
             this.addChild(this.label);
 
@@ -68,9 +70,32 @@ module ui {
     }
 
     export class DisplayBlock extends render.DisplayObjectContainer {
+          private label:render.TextField;
+          public data:render.TextField;
+          private _data:number;
           
+          constructor(_label:string){
+              super();
+              this.label = new render.TextField();
+              this.label.text = _label;
+              this.label.fontColor = "#090909";
+              this.addChild(this.label);
+            
+              this.data = new render.TextField();
+              this.data.x = 30 + 5;
+              this.data.text = "-";
+              this.data.fontColor = "#FFFFFF"
+              this.addChild(this.data);
+          }
 
+          public dataToString(){
+              var S_data = String(this._data);
+              this.data.text = S_data;
+          }
 
+          public setData(data:string){
+              this.data.text = data;
+          }
     }
 
 

@@ -16,8 +16,8 @@ module editor {
 
             super();
             this.cache = document.createElement("canvas");
-            this.cache.width = 400;
-            this.cache.height = 400;
+            this.cache.width = 800;
+            this.cache.height = 800;
 
         }
 
@@ -76,7 +76,9 @@ module editor {
             this.addChild(this.BG_up);
             this.addChild(this.title);
             
-            /* 
+            //UI内部绘制
+            
+            /*
             var button = new ui.Button();
             button.text = "Hello";
             button.width = 100;
@@ -86,6 +88,8 @@ module editor {
                 alert(111);
             }
             */
+       
+            
         }
         
     }

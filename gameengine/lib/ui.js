@@ -15,11 +15,13 @@ var ui;
             this.background = new render.Rect();
             this.background.width = this.width;
             this.background.height = this.height;
+            this.background.color = "#383838";
             this.label = new render.TextField();
             this.label.width = this.width;
             this.label.height = this.height;
             this.label.textAlign = "center";
             this.label.text = this.text;
+            this.label.fontColor = "#EEEEEE";
             this.addChild(this.background);
             this.addChild(this.label);
             eventCore.register(this, events.displayObjectRectHitTest, function () {
@@ -66,9 +68,25 @@ var ui;
     ui.Button = Button;
     var DisplayBlock = (function (_super) {
         __extends(DisplayBlock, _super);
-        function DisplayBlock() {
-            _super.apply(this, arguments);
+        function DisplayBlock(_label) {
+            _super.call(this);
+            this.label = new render.TextField();
+            this.label.text = _label;
+            this.label.fontColor = "#090909";
+            this.addChild(this.label);
+            this.data = new render.TextField();
+            this.data.x = 30 + 5;
+            this.data.text = "-";
+            this.data.fontColor = "#FFFFFF";
+            this.addChild(this.data);
         }
+        DisplayBlock.prototype.dataToString = function () {
+            var S_data = String(this._data);
+            this.data.text = S_data;
+        };
+        DisplayBlock.prototype.setData = function (data) {
+            this.data.text = data;
+        };
         return DisplayBlock;
     }(render.DisplayObjectContainer));
     ui.DisplayBlock = DisplayBlock;
