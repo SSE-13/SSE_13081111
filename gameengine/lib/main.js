@@ -8,18 +8,15 @@ function readFile() {
 function changMD(rows, clows, changecolor) {
     var mapDate = readFile;
     mapData[clows][rows] = changecolor;
-    rowDisplay.data = rows + 1;
-    rowDisplay.setData(String(rows + 1));
-    console.log(rowDisplay.data + "|");
-    colDisplay.data = clows + 1;
-    colDisplay.dataToString();
+    //更新editor信息
+    rowDisplayData.text = String(rows + 1);
+    colDisplayData.text = String(clows + 1);
     if (mapData[clows][rows] == 1) {
-        isAbleDisplay.setData("是");
+        isAbleDisplayData.text = "是";
     }
     else {
-        isAbleDisplay.setData("否");
+        isAbleDisplayData.text = "否";
     }
-    mapEditor.isDirty = false;
     return mapData;
 }
 function saveMap() {
@@ -49,35 +46,15 @@ function createMapEditor() {
             eventCore.register(tile, events.displayObjectRectHitTest, onTileClick);
         }
     }
-    // 网格以外的图元创建
-    //————Btn
-    var Btn_save = new render.Bitmap();
-    Btn_save.source = "Resource/Btn_Save.png";
-    Btn_save.x = 0;
-    Btn_save.y = 50 * cols + 20;
-    renderCore.start(Btn_save, ["Resource/Btn_Save.png"]);
-    eventCore.register(Btn_save, events.displayObjectRectHitTest, onBtnSaveClick);
-    //————Background
-    /*
-    var background = new render.Rect();
-    background.x = 50 * rows + 20;
-    background.width = 300;
-    background.height = 500;
-    background.color = "#797979";
-    
-   
-    world.addChild(Btn_save);
-    world.addChild(background);*/
     return world;
 }
 function onTileClick(tile) {
-    console.log(tile);
     //0 == red 1==blue
-    var changeXnum = 0, changeYnum = 0;
-    changeXnum = tile.x / 50;
-    changeYnum = tile.y / 50;
+    var changeX = 0, changeY = 0;
+    changeX = tile.x / 50;
+    changeY = tile.y / 50;
     //检测之前的颜色
-    if (mapData[changeYnum][changeXnum] == 1) {
+    if (mapData[changeY][changeX] == 1) {
         tile.color = "#FF0000";
         var targetColor = 0;
     }
@@ -86,13 +63,62 @@ function onTileClick(tile) {
         var targetColor = 1;
     }
     //change map & data
-    changMD(changeXnum, changeYnum, targetColor);
+    changMD(changeX, changeY, targetColor);
+    //redoHistroy
+    redoHistroy.push([changeX, changeY, targetColor]);
+}
+function colorChange(tile, changeX, changeY) {
+    if (mapData[changeY][changeX] == 1) {
+        tile.color = "#FF0000";
+        var targetColor = 0;
+    }
+    else {
+        tile.color = "#0000FF";
+        var targetColor = 1;
+    }
 }
 function onBtnSaveClick() {
     saveMap();
     console.log("Save");
 }
+function _Color(color) {
+    if (color == 1) {
+        return 0;
+    }
+    else if (color == 0) {
+        return 1;
+    }
+}
 function onBtnRedo() {
+    if (redoHistroy.length > 0) {
+        var redoStep = new Array();
+        redoStep = redoHistroy.pop();
+        var col = redoStep[0];
+        var row = redoStep[1];
+        var color = redoStep[2];
+        var tile = new editor.Tile();
+        tile.setWalkable(_Color(color));
+        tile.x = col * editor.GRID_PIXEL_WIDTH;
+        tile.y = row * editor.GRID_PIXEL_HEIGHT;
+        tile.ownedCol = col;
+        tile.ownedRow = row;
+        tile.width = editor.GRID_PIXEL_WIDTH;
+        tile.height = editor.GRID_PIXEL_HEIGHT;
+        stage.addChild(tile);
+        eventCore.register(tile, events.displayObjectRectHitTest, onTileClick);
+    }
+    /*
+    console.log(stage.children[0])
+    var worldmap = new render.DisplayObjectContainer();
+    worldmap = stage.children;
+
+    console.log(worldmap.);
+    */
+    //
+    if (redoHistroy.length == 0) {
+        alert("无撤销步骤");
+    }
+    //   console.log(redoStep);
     console.log("Redo");
 }
 var storage = data.Storage.getInstance();
@@ -104,23 +130,43 @@ eventCore.init();
 var mapEditor = createMapEditor();
 var stage = new render.DisplayObjectContainer();
 stage.addChild(mapEditor);
+var redoHistroy = new Array();
+var redoLimit = 1;
+for (var k = 0; k < redoLimit; k++) {
+    redoHistroy[k] = new Array();
+}
+//redoHistroy.push([0,0,0]);
+console.log(redoHistroy);
+/**
+ * 编写界面
+ */
 //panel settings
 var panel = new editor.Block("Edtior", 200, 365);
 panel.x = 450;
 panel.y = 0;
 var rowDisplay = new ui.DisplayBlock("行:");
+var rowDisplayData = new render.TextField();
+rowDisplayData.text = "--";
+rowDisplayData.x = 45;
 rowDisplay.x = 10;
 rowDisplay.y = 40;
+rowDisplay.addChild(rowDisplayData);
 panel.addChild(rowDisplay);
 var colDisplay = new ui.DisplayBlock("列:");
+var colDisplayData = new render.TextField();
+colDisplayData.text = "--";
+colDisplayData.x = 45;
 colDisplay.x = 80;
 colDisplay.y = 40;
+colDisplay.addChild(colDisplayData);
 panel.addChild(colDisplay);
 var isAbleDisplay = new ui.DisplayBlock("是否可以走:");
+var isAbleDisplayData = new render.TextField();
+isAbleDisplayData.text = "--";
+isAbleDisplayData.x = 115;
 isAbleDisplay.x = 10;
 isAbleDisplay.y = 80;
-isAbleDisplay.data.x = 120;
-//isAbleDisplay.data.fontSize = 14;
+isAbleDisplay.addChild(isAbleDisplayData);
 panel.addChild(isAbleDisplay);
 var btnSave = new ui.Button();
 btnSave.text = "保存";

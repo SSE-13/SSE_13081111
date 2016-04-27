@@ -81,6 +81,9 @@ var render;
                 child.draw(context);
             }
         };
+        DisplayObjectContainer.prototype.getChildContainer = function (no) {
+            return;
+        };
         return DisplayObjectContainer;
     }(DisplayObject));
     render.DisplayObjectContainer = DisplayObjectContainer;

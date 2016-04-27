@@ -107,6 +107,11 @@ module render {
                 child.draw(context);
             }
         }
+        
+        getChildContainer(no:number){
+            
+            return 
+        }
     }
 
     export class Bitmap extends DisplayObject {

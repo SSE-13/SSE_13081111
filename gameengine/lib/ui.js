@@ -74,19 +74,7 @@ var ui;
             this.label.text = _label;
             this.label.fontColor = "#090909";
             this.addChild(this.label);
-            this.data = new render.TextField();
-            this.data.x = 30 + 5;
-            this.data.text = "-";
-            this.data.fontColor = "#FFFFFF";
-            this.addChild(this.data);
         }
-        DisplayBlock.prototype.dataToString = function () {
-            var S_data = String(this._data);
-            this.data.text = S_data;
-        };
-        DisplayBlock.prototype.setData = function (data) {
-            this.data.text = data;
-        };
         return DisplayBlock;
     }(render.DisplayObjectContainer));
     ui.DisplayBlock = DisplayBlock;
